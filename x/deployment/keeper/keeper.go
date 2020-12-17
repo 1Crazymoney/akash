@@ -4,20 +4,29 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/ovrclk/akash/x/deployment/types"
+	etypes "github.com/ovrclk/akash/x/escrow/types"
 )
 
 // Keeper of the deployment store
 type Keeper struct {
-	skey sdk.StoreKey
-	cdc  codec.BinaryMarshaler
+	skey   sdk.StoreKey
+	cdc    codec.BinaryMarshaler
+	pspace paramtypes.Subspace
 }
 
 // NewKeeper creates and returns an instance for deployment keeper
-func NewKeeper(cdc codec.BinaryMarshaler, skey sdk.StoreKey) Keeper {
+func NewKeeper(cdc codec.BinaryMarshaler, skey sdk.StoreKey, pspace paramtypes.Subspace) Keeper {
+
+	if !pspace.HasKeyTable() {
+		pspace = pspace.WithKeyTable(types.ParamKeyTable())
+	}
+
 	return Keeper{
-		skey: skey,
-		cdc:  cdc,
+		skey:   skey,
+		cdc:    cdc,
+		pspace: pspace,
 	}
 }
 
@@ -253,6 +262,23 @@ func (k Keeper) OnDeploymentClosed(ctx sdk.Context, group types.Group) {
 		types.NewEventDeploymentClosed(group.ID().DeploymentID()).
 			ToSDKEvent(),
 	)
+}
+
+// GetParams returns the total set of deployment parameters.
+func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
+	k.pspace.GetParamSet(ctx, &params)
+	return params
+}
+
+// SetParams sets the deployment parameters to the paramspace.
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
+	k.pspace.SetParamSet(ctx, &params)
+}
+
+func (k Keeper) OnEscrowAccountClosed(ctx sdk.Context, obj etypes.Account) {
+}
+
+func (k Keeper) OnEscrowPaymentClosed(ctx sdk.Context, obj etypes.Payment) {
 }
 
 func (k Keeper) updateGroup(ctx sdk.Context, group types.Group) {

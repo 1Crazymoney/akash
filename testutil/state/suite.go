@@ -11,11 +11,13 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/ovrclk/akash/app"
 	"github.com/ovrclk/akash/testutil"
 	dkeeper "github.com/ovrclk/akash/x/deployment/keeper"
 	dtypes "github.com/ovrclk/akash/x/deployment/types"
 	"github.com/ovrclk/akash/x/market/keeper"
 	"github.com/ovrclk/akash/x/market/types"
+	mtypes "github.com/ovrclk/akash/x/market/types"
 	pkeeper "github.com/ovrclk/akash/x/provider/keeper"
 	ptypes "github.com/ovrclk/akash/x/provider/types"
 )
@@ -53,8 +55,10 @@ func SetupTestSuite(t testing.TB, codec codec.Marshaler) *TestSuite {
 	require.NoError(t, err)
 	suite.ctx = sdk.NewContext(suite.ms, tmproto.Header{}, true, testutil.Logger(t))
 
-	suite.mkeeper = keeper.NewKeeper(codec, mKey)
-	suite.dkeeper = dkeeper.NewKeeper(codec, dKey)
+	newapp := app.Setup(false)
+
+	suite.mkeeper = keeper.NewKeeper(codec, mKey, newapp.GetSubspace(mtypes.ModuleName))
+	suite.dkeeper = dkeeper.NewKeeper(codec, dKey, newapp.GetSubspace(dtypes.ModuleName))
 	suite.pkeeper = pkeeper.NewKeeper(codec, pKey)
 
 	return suite

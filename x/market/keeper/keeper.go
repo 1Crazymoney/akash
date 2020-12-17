@@ -3,7 +3,9 @@ package keeper
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	dtypes "github.com/ovrclk/akash/x/deployment/types"
+	etypes "github.com/ovrclk/akash/x/escrow/types"
 	"github.com/ovrclk/akash/x/market/types"
 	"github.com/pkg/errors"
 )
@@ -15,13 +17,23 @@ const (
 
 // Keeper of the market store
 type Keeper struct {
-	cdc  codec.BinaryMarshaler
-	skey sdk.StoreKey
+	cdc    codec.BinaryMarshaler
+	skey   sdk.StoreKey
+	pspace paramtypes.Subspace
 }
 
 // NewKeeper creates and returns an instance for Market keeper
-func NewKeeper(cdc codec.BinaryMarshaler, skey sdk.StoreKey) Keeper {
-	return Keeper{cdc: cdc, skey: skey}
+func NewKeeper(cdc codec.BinaryMarshaler, skey sdk.StoreKey, pspace paramtypes.Subspace) Keeper {
+
+	if !pspace.HasKeyTable() {
+		pspace = pspace.WithKeyTable(types.ParamKeyTable())
+	}
+
+	return Keeper{
+		skey:   skey,
+		cdc:    cdc,
+		pspace: pspace,
+	}
 }
 
 // Codec returns keeper codec
@@ -396,6 +408,23 @@ func (k Keeper) WithBidsForOrder(ctx sdk.Context, id types.OrderID, fn func(type
 			break
 		}
 	}
+}
+
+// GetParams returns the total set of deployment parameters.
+func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
+	k.pspace.GetParamSet(ctx, &params)
+	return params
+}
+
+// SetParams sets the deployment parameters to the paramspace.
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
+	k.pspace.SetParamSet(ctx, &params)
+}
+
+func (k Keeper) OnEscrowAccountClosed(ctx sdk.Context, obj etypes.Account) {
+}
+
+func (k Keeper) OnEscrowPaymentClosed(ctx sdk.Context, obj etypes.Payment) {
 }
 
 func (k Keeper) updateOrder(ctx sdk.Context, order types.Order) {
