@@ -3,27 +3,31 @@ package handler
 import (
 	"bytes"
 	"context"
-	"github.com/cosmos/cosmos-sdk/telemetry"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/pkg/errors"
 
 	"github.com/ovrclk/akash/x/deployment/keeper"
 	"github.com/ovrclk/akash/x/deployment/types"
+	ekeeper "github.com/ovrclk/akash/x/escrow/keeper"
+	etypes "github.com/ovrclk/akash/x/escrow/types"
 )
+
+var _ types.MsgServer = msgServer{}
+
+const deploymentEscrowScope = "deployment"
 
 type msgServer struct {
 	deployment keeper.Keeper
 	market     MarketKeeper
+	escrow     ekeeper.Keeper
 }
 
-// NewMsgServerImpl returns an implementation of the deployment MsgServer interface
+// NewServer returns an implementation of the deployment MsgServer interface
 // for the provided Keeper.
-func NewMsgServerImpl(k keeper.Keeper, mkeeper MarketKeeper) types.MsgServer {
+func NewServer(k keeper.Keeper, mkeeper MarketKeeper) types.MsgServer {
 	return &msgServer{deployment: k, market: mkeeper}
 }
-
-var _ types.MsgServer = msgServer{}
 
 func (ms msgServer) CreateDeployment(goCtx context.Context, msg *types.MsgCreateDeployment) (*types.MsgCreateDeploymentResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -55,7 +59,23 @@ func (ms msgServer) CreateDeployment(goCtx context.Context, msg *types.MsgCreate
 	if err := ms.deployment.Create(ctx, deployment, groups); err != nil {
 		return nil, errors.Wrap(types.ErrInternal, err.Error())
 	}
-	telemetry.IncrCounter(1.0, "akash.deployment_created")
+
+	// create orders
+	for _, group := range groups {
+		if _, err := ms.market.CreateOrder(ctx, group.ID(), group.GroupSpec); err != nil {
+			ctx.Logger().With("group", group.ID(), "error", err).Error("creating order")
+			return &types.MsgCreateDeploymentResponse{}, err
+		}
+	}
+
+	// todo: deposit
+
+	if err := ms.escrow.AccountCreate(ctx, etypes.AccountID{
+		Scope: deploymentEscrowScope,
+		XID:   deployment.ID().String(),
+	}, deployment.ID().Owner, nil); err != nil {
+		return &types.MsgCreateDeploymentResponse{}, err
+	}
 
 	return &types.MsgCreateDeploymentResponse{}, nil
 }
@@ -91,16 +111,14 @@ func (ms msgServer) CloseDeployment(goCtx context.Context, msg *types.MsgCloseDe
 		return nil, types.ErrDeploymentClosed
 	}
 
-	deployment.State = types.DeploymentClosed
-
-	if err := ms.deployment.UpdateDeployment(ctx, deployment); err != nil {
-		return nil, errors.Wrap(types.ErrInternal, err.Error())
+	if err := ms.escrow.AccountClose(ctx, etypes.AccountID{
+		Scope: deploymentEscrowScope,
+		XID:   deployment.ID().String(),
+	}); err != nil {
+		return &types.MsgCloseDeploymentResponse{}, err
 	}
 
-	for _, group := range ms.deployment.GetGroups(ctx, deployment.ID()) {
-		ms.deployment.OnDeploymentClosed(ctx, group)
-		ms.market.OnGroupClosed(ctx, group.ID())
-	}
+	// todo: maybe assert that it was closed.
 
 	return &types.MsgCloseDeploymentResponse{}, nil
 }

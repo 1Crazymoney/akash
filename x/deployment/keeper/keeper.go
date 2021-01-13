@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -105,19 +106,19 @@ func (k Keeper) Create(ctx sdk.Context, deployment types.Deployment, groups []ty
 	store.Set(key, k.cdc.MustMarshalBinaryBare(&deployment))
 
 	for _, group := range groups {
-		group := group
 		if !group.ID().DeploymentID().Equals(deployment.ID()) {
 			return types.ErrInvalidGroupID
 		}
 		gkey := groupKey(group.ID())
 		store.Set(gkey, k.cdc.MustMarshalBinaryBare(&group))
-		k.updateOpenGroupsIndex(ctx, group)
 	}
 
 	ctx.EventManager().EmitEvent(
 		types.NewEventDeploymentCreated(deployment.ID(), deployment.Version).
 			ToSDKEvent(),
 	)
+
+	telemetry.IncrCounter(1.0, "akash.deployment_created")
 
 	return nil
 }

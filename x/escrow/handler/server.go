@@ -5,6 +5,6 @@ import (
 	"github.com/ovrclk/akash/x/escrow/types"
 )
 
-func NewMsgServerImpl(k keeper.Keeper) types.MsgServer {
+func NewServer(k keeper.Keeper) types.MsgServer {
 	return nil
 }
