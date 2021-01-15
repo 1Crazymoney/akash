@@ -15,6 +15,8 @@ service Msg {
   // CloseBid defines a method to close a bid given proper inputs.
   rpc CloseBid(MsgCloseBid) returns (MsgCloseBidResponse);
 
+  rpc CreateLease(MsgCreateLease) returns (MsgCreateLeaseResponse);
+
   // CloseOrder defines a method to close an order given proper inputs.
   rpc CloseOrder(MsgCloseOrder) returns (MsgCloseOrderResponse);
 }
@@ -51,6 +53,18 @@ message MsgCloseBid {
 
 // MsgCloseBidResponse defines the Msg/CloseBid response type.
 message MsgCloseBidResponse {}
+
+message MsgCreateLease {
+  option (gogoproto.equal) = false;
+  BidID bid_id = 1 [
+    (gogoproto.customname) = "BidID",
+    (gogoproto.nullable)   = false,
+    (gogoproto.jsontag)    = "id",
+    (gogoproto.moretags)   = "yaml:\"id\""
+  ];
+}
+
+message MsgCreateLeaseResponse {}
 
 // BidID stores owner and all other seq numbers
 // A successful bid becomes a Lease(ID).

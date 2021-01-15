@@ -128,6 +128,11 @@ func (ms msgServer) CloseBid(goCtx context.Context, msg *types.MsgCloseBid) (*ty
 	return &types.MsgCloseBidResponse{}, nil
 }
 
+func (ms msgServer) CreateLease(goCtx context.Context, msg *types.MsgCreateLease) (*types.MsgCreateLeaseResponse, error) {
+	// TODO
+	return &types.MsgCreateLeaseResponse{}, nil
+}
+
 func (ms msgServer) CloseOrder(goCtx context.Context, msg *types.MsgCloseOrder) (*types.MsgCloseOrderResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
