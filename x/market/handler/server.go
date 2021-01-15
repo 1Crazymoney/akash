@@ -18,7 +18,7 @@ type msgServer struct {
 
 // NewMsgServerImpl returns an implementation of the market MsgServer interface
 // for the provided Keeper.
-func NewMsgServerImpl(k Keepers) types.MsgServer {
+func NewServer(k Keepers) types.MsgServer {
 	return &msgServer{keepers: k}
 }
 

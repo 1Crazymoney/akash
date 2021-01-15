@@ -9,7 +9,7 @@ import (
 
 // NewHandler returns a handler for "market" type messages
 func NewHandler(keepers Keepers) sdk.Handler {
-	ms := NewMsgServerImpl(keepers)
+	ms := NewServer(keepers)
 
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		switch msg := msg.(type) {
