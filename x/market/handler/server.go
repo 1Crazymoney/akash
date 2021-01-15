@@ -8,8 +8,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	atypes "github.com/ovrclk/akash/x/audit/types"
+	etypes "github.com/ovrclk/akash/x/escrow/types"
 	"github.com/ovrclk/akash/x/market/types"
 	ptypes "github.com/ovrclk/akash/x/provider/types"
+)
+
+const (
+	bidEscrowScope = "bid"
 )
 
 type msgServer struct {
@@ -65,8 +70,18 @@ func (ms msgServer) CreateBid(goCtx context.Context, msg *types.MsgCreateBid) (*
 		return nil, types.ErrAttributeMismatch
 	}
 
-	if _, err := ms.keepers.Market.CreateBid(ctx, msg.Order, provider, msg.Price); err != nil {
+	bid, err := ms.keepers.Market.CreateBid(ctx, msg.Order, provider, msg.Price)
+	if err != nil {
 		return nil, err
+	}
+
+	// crate escrow account for this bid
+	// todo: check deposit
+	if err := ms.keepers.Escrow.AccountCreate(ctx, etypes.AccountID{
+		Scope: bidEscrowScope,
+		XID:   bid.ID().String(),
+	}, bid.ID().Owner, sdk.NewCoin("XXX", sdk.NewInt(0))); err != nil {
+		return &types.MsgCreateBidResponse{}, err
 	}
 
 	telemetry.IncrCounter(1.0, "akash.bids")
@@ -115,6 +130,8 @@ func (ms msgServer) CloseBid(goCtx context.Context, msg *types.MsgCloseBid) (*ty
 
 func (ms msgServer) CloseOrder(goCtx context.Context, msg *types.MsgCloseOrder) (*types.MsgCloseOrderResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// close payment
 
 	order, found := ms.keepers.Market.GetOrder(ctx, msg.OrderID)
 	if !found {

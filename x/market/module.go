@@ -16,6 +16,7 @@ import (
 	"github.com/spf13/cobra"
 
 	akeeper "github.com/ovrclk/akash/x/audit/keeper"
+	ekeeper "github.com/ovrclk/akash/x/escrow/keeper"
 	"github.com/ovrclk/akash/x/market/client/cli"
 	"github.com/ovrclk/akash/x/market/client/rest"
 	"github.com/ovrclk/akash/x/market/handler"
@@ -110,6 +111,7 @@ type AppModule struct {
 func NewAppModule(
 	cdc codec.Marshaler,
 	keeper keeper.Keeper,
+	ekeeper ekeeper.Keeper,
 	akeeper akeeper.Keeper,
 	dkeeper handler.DeploymentKeeper,
 	pkeeper handler.ProviderKeeper,
@@ -118,6 +120,7 @@ func NewAppModule(
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keepers: handler.Keepers{
+			Escrow:     ekeeper,
 			Audit:      akeeper,
 			Market:     keeper,
 			Deployment: dkeeper,

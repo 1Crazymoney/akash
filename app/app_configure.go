@@ -98,6 +98,7 @@ func (app *AkashApp) akashAppModules() []module.AppModule {
 		market.NewAppModule(
 			app.appCodec,
 			app.keeper.market,
+			app.keeper.escrow,
 			app.keeper.audit,
 			app.keeper.deployment,
 			app.keeper.provider,
