@@ -41,18 +41,15 @@ message GroupSpec {
   option (gogoproto.goproto_getters) = false;
 
   string name = 1 [(gogoproto.jsontag) = "name", (gogoproto.moretags) = "yaml:\"name\""];
+
   akash.base.v1beta1.PlacementRequirements requirements = 2 [
     (gogoproto.nullable) = false,
     (gogoproto.jsontag)  = "requirements",
     (gogoproto.moretags) = "yaml:\"requirements\""
   ];
+
   repeated Resource resources = 3
       [(gogoproto.nullable) = false, (gogoproto.jsontag) = "resources", (gogoproto.moretags) = "yaml:\"resources\""];
-  int64 order_bid_duration = 4 [
-    (gogoproto.customname) = "OrderBidDuration",
-    (gogoproto.jsontag)    = "order-bid-duration",
-    (gogoproto.moretags)   = "yaml:\"order-bid-duration\""
-  ];
 }
 
 // Group stores group id, state and specifications of group
@@ -75,13 +72,11 @@ message Group {
     // GroupOpen denotes state for group open
     open = 1 [(gogoproto.enumvalue_customname) = "GroupOpen"];
     // GroupOrdered denotes state for group ordered
-    ordered = 2 [(gogoproto.enumvalue_customname) = "GroupOrdered"];
-    // GroupMatched denotes state for group matched
-    matched = 3 [(gogoproto.enumvalue_customname) = "GroupMatched"];
+    paused = 2 [(gogoproto.enumvalue_customname) = "GroupPaused"];
     // GroupInsufficientFunds denotes state for group insufficient_funds
-    insufficient_funds = 4 [(gogoproto.enumvalue_customname) = "GroupInsufficientFunds"];
+    insufficient_funds = 3 [(gogoproto.enumvalue_customname) = "GroupInsufficientFunds"];
     // GroupClosed denotes state for group closed
-    closed = 5 [(gogoproto.enumvalue_customname) = "GroupClosed"];
+    closed = 4 [(gogoproto.enumvalue_customname) = "GroupClosed"];
   }
 
   State     state      = 2 [(gogoproto.jsontag) = "state", (gogoproto.moretags) = "yaml:\"state\""];

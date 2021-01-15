@@ -64,15 +64,14 @@ func (k Keeper) CreateOrder(ctx sdk.Context, gid dtypes.GroupID, spec dtypes.Gro
 		OrderID: types.MakeOrderID(gid, oseq),
 		Spec:    spec,
 		State:   types.OrderOpen,
-		StartAt: ctx.BlockHeight() + orderTTL,                         // TODO: check overflow
-		CloseAt: ctx.BlockHeight() + orderTTL + spec.OrderBidDuration, // TODO: check overflow, set via parameter
 	}
 
 	key := orderKey(order.ID())
-	// XXX TODO: check not overwrite
+
 	if store.Has(key) {
 		return types.Order{}, types.ErrOrderExists
 	}
+
 	store.Set(key, k.cdc.MustMarshalBinaryBare(&order))
 	k.updateOpenOrderIndex(store, order)
 
@@ -137,14 +136,14 @@ func (k Keeper) CreateLease(ctx sdk.Context, bid types.Bid) {
 // OnOrderMatched updates order state to matched
 func (k Keeper) OnOrderMatched(ctx sdk.Context, order types.Order) {
 	// TODO: assert state transition
-	order.State = types.OrderMatched
+	order.State = types.OrderActive
 	k.updateOrder(ctx, order)
 }
 
-// OnBidMatched updates bid state to matched
+// OnBidActive updates bid state to matched
 func (k Keeper) OnBidMatched(ctx sdk.Context, bid types.Bid) {
 	// TODO: assert state transition
-	bid.State = types.BidMatched
+	bid.State = types.BidActive
 	k.updateBid(ctx, bid)
 }
 
@@ -289,7 +288,7 @@ func (k Keeper) LeaseForOrder(ctx sdk.Context, oid types.OrderID) (types.Lease, 
 		if !item.ID().OrderID().Equals(oid) {
 			return false
 		}
-		if item.State != types.BidMatched {
+		if item.State != types.BidActive {
 			return false
 		}
 		value, found = k.GetLease(ctx, types.LeaseID(item.ID()))

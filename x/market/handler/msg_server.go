@@ -100,8 +100,8 @@ func (ms msgServer) CloseBid(goCtx context.Context, msg *types.MsgCloseBid) (*ty
 		return nil, types.ErrLeaseNotActive
 	}
 
-	if bid.State != types.BidMatched {
-		return nil, types.ErrBidNotMatched
+	if bid.State != types.BidActive {
+		return nil, types.ErrBidNotActive
 	}
 
 	ms.keepers.Market.OnBidClosed(ctx, bid)

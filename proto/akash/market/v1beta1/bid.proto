@@ -89,7 +89,7 @@ message Bid {
     // BidOpen denotes state for bid open
     open = 1 [(gogoproto.enumvalue_customname) = "BidOpen"];
     // BidMatched denotes state for bid open
-    matched = 2 [(gogoproto.enumvalue_customname) = "BidMatched"];
+    active = 2 [(gogoproto.enumvalue_customname) = "BidActive"];
     // BidLost denotes state for bid lost
     lost = 3 [(gogoproto.enumvalue_customname) = "BidLost"];
     // BidClosed denotes state for bid closed

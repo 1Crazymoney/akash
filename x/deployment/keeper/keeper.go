@@ -214,7 +214,7 @@ func (k Keeper) WithOpenGroups(ctx sdk.Context, fn func(types.Group) bool) {
 // OnOrderCreated updates group state to group ordered
 func (k Keeper) OnOrderCreated(ctx sdk.Context, group types.Group) {
 	// TODO: assert state transition
-	group.State = types.GroupOrdered
+	group.State = types.GroupOpen
 	k.updateGroup(ctx, group)
 }
 
@@ -222,7 +222,7 @@ func (k Keeper) OnOrderCreated(ctx sdk.Context, group types.Group) {
 func (k Keeper) OnLeaseCreated(ctx sdk.Context, id types.GroupID) {
 	// TODO: assert state transition
 	group, _ := k.GetGroup(ctx, id)
-	group.State = types.GroupMatched
+	group.State = types.GroupOpen
 	k.updateGroup(ctx, group)
 }
 

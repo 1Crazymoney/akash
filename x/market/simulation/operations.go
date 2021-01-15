@@ -153,7 +153,7 @@ func SimulateMsgCloseBid(ak govtypes.AccountKeeper, ks keepers.Keepers) simtypes
 		var bids []types.Bid
 
 		ks.Market.WithBids(ctx, func(bid types.Bid) bool {
-			if bid.State == types.BidMatched {
+			if bid.State == types.BidActive {
 				lease, ok := ks.Market.GetLease(ctx, types.LeaseID(bid.BidID))
 				if ok && lease.State == types.LeaseActive {
 					bids = append(bids, bid)
@@ -220,7 +220,7 @@ func SimulateMsgCloseBid(ak govtypes.AccountKeeper, ks keepers.Keepers) simtypes
 func SimulateMsgCloseOrder(ak govtypes.AccountKeeper, ks keepers.Keepers) simtypes.Operation {
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accounts []simtypes.Account,
 		chainID string) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-		orders := getOrdersWithState(ctx, ks, types.OrderMatched)
+		orders := getOrdersWithState(ctx, ks, types.OrderActive)
 		if len(orders) == 0 {
 			return simtypes.NoOpMsg(types.ModuleName, types.MsgTypeCloseOrder, "no orders with state matched found"), nil, nil
 		}

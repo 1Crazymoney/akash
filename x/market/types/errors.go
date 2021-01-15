@@ -15,7 +15,7 @@ const (
 	errCodeUnknownLeaseForOrder
 	errCodeUnknownOrderForBid
 	errCodeLeaseNotActive
-	errCodeBidNotMatched
+	errCodeBidNotActive
 	errCodeUnknownOrder
 	errCodeNoLeaseForOrder
 	errCodeOrderNotFound
@@ -23,7 +23,7 @@ const (
 	errCodeLeaseNotFound
 	errCodeBidExists
 	errCodeInvalidPrice
-	errCodeOrderMatched
+	errCodeOrderActive
 	errCodeOrderClosed
 	errCodeOrderExists
 	errCodeOrderDurationExceeded
@@ -51,8 +51,8 @@ var (
 	ErrUnknownOrderForBid = sdkerrors.Register(ModuleName, errCodeUnknownOrderForBid, "unknown order for bid")
 	// ErrLeaseNotActive is the error when lease is not active
 	ErrLeaseNotActive = sdkerrors.Register(ModuleName, errCodeLeaseNotActive, "lease not active")
-	// ErrBidNotMatched is the error when bid is not matched
-	ErrBidNotMatched = sdkerrors.Register(ModuleName, errCodeBidNotMatched, "bid not matched")
+	// ErrBidNotActive is the error when bid is not matched
+	ErrBidNotActive = sdkerrors.Register(ModuleName, errCodeBidNotActive, "bid not active")
 	// ErrUnknownOrder is the error when order is unknown
 	ErrUnknownOrder = sdkerrors.Register(ModuleName, errCodeUnknownOrder, "unknown order")
 	// ErrNoLeaseForOrder is the error when there is no lease for order
@@ -68,7 +68,7 @@ var (
 	// ErrBidInvalidPrice bid invalid price
 	ErrBidInvalidPrice = sdkerrors.Register(ModuleName, errCodeInvalidPrice, "bid price is invalid")
 	// ErrOrderMatched order matched
-	ErrOrderMatched = sdkerrors.New(ModuleName, errCodeOrderMatched, "order matched")
+	ErrOrderActive = sdkerrors.New(ModuleName, errCodeOrderActive, "order active")
 	// ErrOrderClosed order closed
 	ErrOrderClosed = sdkerrors.New(ModuleName, errCodeOrderClosed, "order closed")
 	// ErrOrderExists indicates a new order was proposed overwrite the existing store key

@@ -73,7 +73,7 @@ func (ms msgServer) CreateDeployment(goCtx context.Context, msg *types.MsgCreate
 	if err := ms.escrow.AccountCreate(ctx, etypes.AccountID{
 		Scope: deploymentEscrowScope,
 		XID:   deployment.ID().String(),
-	}, deployment.ID().Owner, nil); err != nil {
+	}, deployment.ID().Owner, sdk.NewCoin("XXX", sdk.NewInt(0))); err != nil {
 		return &types.MsgCreateDeploymentResponse{}, err
 	}
 
