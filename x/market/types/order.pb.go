@@ -214,9 +214,9 @@ func (m *OrderID) GetOSeq() uint32 {
 type Order struct {
 	OrderID OrderID         `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"id" yaml:"id"`
 	State   Order_State     `protobuf:"varint,2,opt,name=state,proto3,enum=akash.market.v1beta1.Order_State" json:"state" yaml:"state"`
-	StartAt int64           `protobuf:"varint,3,opt,name=start_at,json=startAt,proto3" json:"start-at" yaml:"start-at"`
+	StartAt int64           `protobuf:"varint,3,opt,name=start_at,json=startAt,proto3" json:"start_at" yaml:"start_at"`
 	Spec    types.GroupSpec `protobuf:"bytes,4,opt,name=spec,proto3" json:"spec" yaml:"spec"`
-	CloseAt int64           `protobuf:"varint,5,opt,name=close_at,json=closeAt,proto3" json:"close-at" yaml:"close-at"`
+	CloseAt int64           `protobuf:"varint,5,opt,name=close_at,json=closeAt,proto3" json:"close_at" yaml:"close_at"`
 }
 
 func (m *Order) Reset()      { *m = Order{} }

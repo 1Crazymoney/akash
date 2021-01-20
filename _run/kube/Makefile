@@ -16,7 +16,7 @@ provider-run:
 		--deployment-ingress-static-hosts true \
 		--deployment-ingress-domain "$(GATEWAY_HOSTNAME)" \
 		--cluster-node-port-quantity 100 \
-		--cluster-public-hostname "$(GATEWAY_HOSTNAME)" \
+		--cluster_public_hostname "$(GATEWAY_HOSTNAME)" \
 		--bid-price-strategy "randomRange"
 
 .PHONY: provider-status

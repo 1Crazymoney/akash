@@ -33,7 +33,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // MsgCreateProvider defines an SDK message for creating a provider
 type MsgCreateProvider struct {
 	Owner      string                                   `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner" yaml:"owner"`
-	HostURI    string                                   `protobuf:"bytes,2,opt,name=host_uri,json=hostUri,proto3" json:"host-uri" yaml:"host-uri"`
+	HostURI    string                                   `protobuf:"bytes,2,opt,name=host_uri,json=hostUri,proto3" json:"host_uri" yaml:"host_uri"`
 	Attributes github_com_ovrclk_akash_types.Attributes `protobuf:"bytes,3,rep,name=attributes,proto3,castrepeated=github.com/ovrclk/akash/types.Attributes" json:"attributes" yaml:"attributes"`
 }
 
@@ -131,7 +131,7 @@ var xxx_messageInfo_MsgCreateProviderResponse proto.InternalMessageInfo
 // MsgUpdateProvider defines an SDK message for updating a provider
 type MsgUpdateProvider struct {
 	Owner      string                                   `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner" yaml:"owner"`
-	HostURI    string                                   `protobuf:"bytes,2,opt,name=host_uri,json=hostUri,proto3" json:"host-uri" yaml:"host-uri"`
+	HostURI    string                                   `protobuf:"bytes,2,opt,name=host_uri,json=hostUri,proto3" json:"host_uri" yaml:"host_uri"`
 	Attributes github_com_ovrclk_akash_types.Attributes `protobuf:"bytes,3,rep,name=attributes,proto3,castrepeated=github.com/ovrclk/akash/types.Attributes" json:"attributes" yaml:"attributes"`
 }
 
@@ -311,7 +311,7 @@ var xxx_messageInfo_MsgDeleteProviderResponse proto.InternalMessageInfo
 // Provider stores owner and host details
 type Provider struct {
 	Owner      string                                   `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner" yaml:"owner"`
-	HostURI    string                                   `protobuf:"bytes,2,opt,name=host_uri,json=hostUri,proto3" json:"host-uri" yaml:"host-uri"`
+	HostURI    string                                   `protobuf:"bytes,2,opt,name=host_uri,json=hostUri,proto3" json:"host_uri" yaml:"host_uri"`
 	Attributes github_com_ovrclk_akash_types.Attributes `protobuf:"bytes,3,rep,name=attributes,proto3,castrepeated=github.com/ovrclk/akash/types.Attributes" json:"attributes" yaml:"attributes"`
 }
 

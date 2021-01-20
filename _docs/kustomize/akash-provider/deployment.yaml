@@ -228,7 +228,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: akash-provider-config
-                  key: cluster-public-hostname
+                  key: cluster_public_hostname
                   optional: true
 
             - name: AKASH_CLUSTER_NODE_PORT_QUANTITY

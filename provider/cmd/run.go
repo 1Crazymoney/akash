@@ -58,7 +58,7 @@ const (
 	FlagBidPriceScriptPath               = "bid-price-script-path"
 	FlagBidPriceScriptProcessLimit       = "bid-price-script-process-limit"
 	FlagBidPriceScriptTimeout            = "bid-price-script-process-timeout"
-	FlagClusterPublicHostname            = "cluster-public-hostname"
+	FlagClusterPublicHostname            = "cluster_public_hostname"
 	FlagClusterNodePortQuantity          = "cluster-node-port-quantity"
 	FlagClusterWaitReadyDuration         = "cluster-wait-ready-duration"
 	FlagInventoryResourcePollPeriod      = "inventory-resource-poll-period"

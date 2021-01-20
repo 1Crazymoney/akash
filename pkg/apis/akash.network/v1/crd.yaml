@@ -81,7 +81,7 @@ spec:
                                 port:
                                   type: integer
                                   format: uint16
-                                external-port:
+                                external_port:
                                   type: integer
                                   format: uint16
                                 proto:

@@ -216,7 +216,7 @@ type GroupSpec struct {
 	Name             string                      `protobuf:"bytes,1,opt,name=name,proto3" json:"name" yaml:"name"`
 	Requirements     types.PlacementRequirements `protobuf:"bytes,2,opt,name=requirements,proto3" json:"requirements" yaml:"requirements"`
 	Resources        []Resource                  `protobuf:"bytes,3,rep,name=resources,proto3" json:"resources" yaml:"resources"`
-	OrderBidDuration int64                       `protobuf:"varint,4,opt,name=order_bid_duration,json=orderBidDuration,proto3" json:"order-bid-duration" yaml:"order-bid-duration"`
+	OrderBidDuration int64                       `protobuf:"varint,4,opt,name=order_bid_duration,json=orderBidDuration,proto3" json:"order_bid_duration" yaml:"order_bid_duration"`
 }
 
 func (m *GroupSpec) Reset()         { *m = GroupSpec{} }
