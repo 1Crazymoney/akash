@@ -6,7 +6,7 @@ PROVIDER_HOSTNAME ?= https://localhost:8443
 provider-run:
 	$(AKASHCTL) $(KEY_OPTS) provider run $(CHAIN_OPTS) \
 		--from "$(PROVIDER_KEY_NAME)" \
-		--cluster_public_hostname "localhost" \
+		--cluster-public-hostname "localhost" \
 		--bid-price-strategy "randomRange"
 
 .PHONY: provider-status
