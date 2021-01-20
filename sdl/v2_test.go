@@ -135,7 +135,14 @@ func Test_v1_Parse_simple(t *testing.T) {
 			Storage: &atypes.Storage{
 				Quantity: atypes.NewResourceValue(randStorage),
 			},
-			Endpoints: make([]atypes.Endpoint, 1),
+			Endpoints: []atypes.Endpoint{
+				{
+					HttpOnly: true,
+				},
+				{
+					HttpOnly: false,
+				},
+			},
 		},
 	}, group.GetResources()[0])
 

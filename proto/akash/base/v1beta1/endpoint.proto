@@ -8,4 +8,5 @@ option go_package = "github.com/ovrclk/akash/types";
 // Endpoint describes a publicly accessible IP service
 message Endpoint {
   option (gogoproto.equal) = true;
+  bool http_only = 1;
 }

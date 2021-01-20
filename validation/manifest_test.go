@@ -265,7 +265,11 @@ func simpleResourceUnits() akashtypes.ResourceUnits {
 			},
 			Attributes: nil,
 		},
-		Endpoints: nil,
+		Endpoints: []akashtypes.Endpoint{
+			{
+				HttpOnly: true,
+			},
+		},
 	}
 }
 
